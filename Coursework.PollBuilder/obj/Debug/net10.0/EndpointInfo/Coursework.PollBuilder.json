@@ -1,0 +1,204 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Coursework.PollBuilder | v1",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:7082"
+    },
+    {
+      "url": "http://localhost:5085"
+    }
+  ],
+  "paths": {
+    "/api/Polls": {
+      "post": {
+        "tags": [
+          "Polls"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePollDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePollDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePollDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Polls/{code}": {
+      "get": {
+        "tags": [
+          "Polls"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Polls/{code}/vote": {
+      "post": {
+        "tags": [
+          "Polls"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoteDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Polls/{code}/results": {
+      "get": {
+        "tags": [
+          "Polls"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Polls/{code}/close": {
+      "post": {
+        "tags": [
+          "Polls"
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreatePollDto": {
+        "required": [
+          "question",
+          "options"
+        ],
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "VoteDto": {
+        "required": [
+          "optionIndex",
+          "voterToken"
+        ],
+        "type": "object",
+        "properties": {
+          "optionIndex": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "voterToken": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Polls"
+    }
+  ]
+}

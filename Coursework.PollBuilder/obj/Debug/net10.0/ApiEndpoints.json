@@ -1,0 +1,87 @@
+[
+  {
+    "ContainingType": "Coursework.PollBuilder.Controllers.PollsController",
+    "Method": "CreatePoll",
+    "RelativePath": "api/Polls",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Coursework.PollBuilder.Controllers.PollsController\u002BCreatePollDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Coursework.PollBuilder.Controllers.PollsController",
+    "Method": "GetPoll",
+    "RelativePath": "api/Polls/{code}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Coursework.PollBuilder.Controllers.PollsController",
+    "Method": "ClosePoll",
+    "RelativePath": "api/Polls/{code}/close",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Coursework.PollBuilder.Controllers.PollsController",
+    "Method": "GetResults",
+    "RelativePath": "api/Polls/{code}/results",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Coursework.PollBuilder.Controllers.PollsController",
+    "Method": "Vote",
+    "RelativePath": "api/Polls/{code}/vote",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Coursework.PollBuilder.Controllers.PollsController\u002BVoteDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

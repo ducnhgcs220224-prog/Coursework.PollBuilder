@@ -1,0 +1,156 @@
+﻿<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card card-vintage p-4 p-md-5">
+            <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+                <h2 class="fw-bold mb-0 text-vintage-accent">
+                    <i class="fa-solid fa-square-poll-vertical me-2"></i>Live Results
+                </h2>
+
+                <div class="d-flex gap-2">
+                    <a href="/poll/@ViewBag.PollCode" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                        <i class="fa-solid fa-arrow-left me-1"></i> Back to Vote
+                    </a>
+                    <!-- Nút khóa bình chọn mặc định được ẩn đi -->
+                    <button id="closePollBtn" class="btn btn-sm btn-vintage-danger rounded-pill px-3 shadow-sm" style="display: none;" onclick="closePoll()">
+                        <i class="fa-solid fa-lock me-1"></i> Close Poll
+                    </button>
+                </div>
+            </div>
+
+            <!-- Khung chứa Chart.js -->
+            <div class="bg-white p-3 rounded-3 shadow-sm border border-vintage-light mb-4">
+                <canvas id="resultChart" height="120"></canvas>
+            </div>
+
+            <div class="text-center mt-3 d-flex flex-column align-items-center">
+                <div class="d-flex align-items-center text-muted mb-4 px-3 py-2 rounded-pill bg-vintage-muted">
+                    <span class="spinner-grow spinner-grow-sm text-success me-2" role="status"></span>
+                    Waiting for live votes... Data updates in real-time.
+                </div>
+
+                <a href="/" class="btn btn-vintage-primary px-5 py-2 rounded-pill">
+                    <i class="fa-solid fa-plus me-1"></i> Create Another Poll
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const pollCode = '@ViewBag.PollCode';
+        let chartInstance = null;
+
+        const vintageColors = [
+            'rgba(141, 110, 99, 0.8)',
+            'rgba(93, 64, 55, 0.8)',
+            'rgba(161, 136, 127, 0.8)',
+            'rgba(215, 204, 200, 0.8)',
+            'rgba(121, 85, 72, 0.8)',
+            'rgba(62, 39, 35, 0.8)'
+        ];
+        const vintageBorders = vintageColors.map(color => color.replace('0.8', '1'));
+
+        function loadData() {
+            $.get(`/api/polls/${pollCode}/results`, function (data) {
+                const labels = data.map(x => x.optionName);
+                const votes = data.map(x => x.voteCount);
+
+                if (chartInstance) {
+                    chartInstance.data.labels = labels;
+                    chartInstance.data.datasets[0].data = votes;
+                    chartInstance.update();
+                } else {
+                    const ctx = document.getElementById('resultChart').getContext('2d');
+
+                    chartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: ' Total Votes',
+                                data: votes,
+                                backgroundColor: vintageColors,
+                                borderColor: vintageBorders,
+                                borderWidth: 1,
+                                borderRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    backgroundColor: 'rgba(62, 39, 35, 0.9)',
+                                    titleFont: { family: 'Nunito', size: 14 },
+                                    bodyFont: { family: 'Nunito', size: 14, weight: 'bold' },
+                                    padding: 12,
+                                    cornerRadius: 8
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { stepSize: 1, font: { family: 'Nunito' } },
+                                    grid: { color: 'rgba(0,0,0,0.05)' }
+                                },
+                                x: {
+                                    ticks: { font: { family: 'Nunito', weight: 'bold' } },
+                                    grid: { display: false }
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            if (localStorage.getItem("isCreator_" + pollCode) === "true") {
+                $('#closePollBtn').fadeIn();
+            }
+
+            loadData();
+
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/pollHub")
+                .build();
+
+            connection.on("ReceiveVoteUpdate", function () {
+                loadData();
+            });
+
+            connection.start().catch(err => console.error(err.toString()));
+        });
+
+        function closePoll() {
+            Swal.fire({
+                title: 'Close this poll?',
+                text: "No one will be able to vote once it's closed!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#8e0000',
+                cancelButtonColor: '#bcaaa4',
+                confirmButtonText: 'Yes, close it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post(`/api/polls/${pollCode}/close`, function() {
+                        Swal.fire(
+                            'Closed!',
+                            'Your poll has been successfully closed.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    }).fail(function() {
+                        Swal.fire(
+                            'Error!',
+                            'Something went wrong while closing.',
+                            'error'
+                        );
+                    });
+                }
+            });
+        }
+    </script>
+}

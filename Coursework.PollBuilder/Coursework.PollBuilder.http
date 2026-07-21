@@ -1,0 +1,29 @@
+@HostAddress = https://localhost:7082
+
+### 1. Test chức năng tạo Poll mới
+POST {{HostAddress}}/api/polls
+Content-Type: application/json
+
+{
+  "question": "Hôm nay chúng ta chạy kịp deadline coursework không?",
+  "options": [
+    "Kịp chứ, còn tận 1 ngày",
+    "Hơi mệt nhưng sẽ qua môn",
+    "Chắc chắn Distinction!"
+  ]
+}
+
+### 2. Lấy thông tin poll (thay 1D66E3 bằng code bạn nhận được)
+GET {{HostAddress}}/api/polls/1D66E3
+
+### 3. Bình chọn (Vote)
+POST {{HostAddress}}/api/polls/1D66E3/vote
+Content-Type: application/json
+
+{
+  "optionIndex": 0,
+  "voterToken": "my-unique-browser-token-123"
+}
+
+### 4. Lấy kết quả
+GET {{HostAddress}}/api/polls/1D66E3/results

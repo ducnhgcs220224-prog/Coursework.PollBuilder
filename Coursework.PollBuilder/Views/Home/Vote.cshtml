@@ -1,0 +1,106 @@
+﻿<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <div class="card card-vintage p-5 text-center shadow-lg border-0">
+
+            <div class="mb-4">
+                <span class="badge rounded-pill bg-secondary bg-opacity-25 text-dark px-3 py-2 mb-3">
+                    <i class="fa-solid fa-link me-1"></i> Code: @ViewBag.PollCode
+                </span>
+                <h2 id="poll-question" class="fw-bold mb-4 poll-question-title">
+                    <i class="fa-solid fa-spinner fa-spin text-muted me-2"></i>Loading question...
+                </h2>
+            </div>
+
+            <div id="options-list" class="d-grid gap-3 mb-5 px-md-4">
+                <!-- Nút vote sẽ hiển thị ở đây qua JS -->
+            </div>
+
+            <hr class="text-muted opacity-25 mb-4" />
+
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <button class="btn btn-light border shadow-sm px-4 rounded-pill" onclick="copyPollLink()">
+                    <i class="fa-regular fa-copy me-2"></i>Copy Link
+                </button>
+                <a href="/poll/@ViewBag.PollCode/results" class="btn btn-vintage-outline px-4 rounded-pill">
+                    <i class="fa-solid fa-chart-column me-2"></i>View Results
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const pollCode = '@ViewBag.PollCode';
+        let voterToken = localStorage.getItem("voterToken");
+        if (!voterToken) {
+            voterToken = crypto.randomUUID();
+            localStorage.setItem("voterToken", voterToken);
+        }
+
+        $(document).ready(function () {
+            $.get('/api/polls/' + pollCode, function (poll) {
+                $('#poll-question').text(poll.question);
+                $('#options-list').empty();
+
+                if (poll.isClosed) {
+                    $('#options-list').html(`
+                        <div class="alert alert-vintage-closed border-0 shadow-sm fs-5 py-4">
+                            <i class="fa-solid fa-lock me-2"></i>This poll has been closed. No further votes are accepted.
+                        </div>`);
+                } else {
+                    poll.options.forEach((opt, index) => {
+                        $('#options-list').append(`
+                            <button class="btn btn-lg btn-outline-dark text-start ps-4 py-3 position-relative rounded-3 btn-vintage-option"
+                                    onclick="submitVote(${index})">
+                                <span class="fw-bold fs-5">${opt}</span>                          
+                            </button>
+                        `);
+                    });
+                }
+            }).fail(function() {
+                $('#poll-question').html('<i class="fa-solid fa-triangle-exclamation text-danger me-2"></i>Poll Not Found!');
+            });
+        });
+
+        function submitVote(optionIndex) {
+            $.ajax({
+                url: `/api/polls/${pollCode}/vote`,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ optionIndex: optionIndex, voterToken: voterToken }),
+                success: function () {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Vote Cast!',
+                        text: 'Taking you to the results...',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.href = `/poll/${pollCode}/results`;
+                    });
+                },
+                error: function (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Cannot Vote',
+                        text: err.responseText,
+                        confirmButtonColor: '#5d4037'
+                    });
+                }
+            });
+        }
+
+        function copyPollLink() {
+            navigator.clipboard.writeText(window.location.href);
+            Swal.fire({
+                toast: true,
+                position: 'bottom-end',
+                icon: 'success',
+                title: 'Link copied to clipboard!',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+    </script>
+}

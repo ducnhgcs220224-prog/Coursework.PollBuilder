@@ -1,0 +1,130 @@
+﻿/* ================= VINTAGE THEME ================= */
+body {
+    background-color: #eaddcf;
+    font-family: 'Nunito', sans-serif;
+    color: #3e2723;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+    font-family: 'Lora', serif;
+}
+
+.navbar-vintage {
+    background-color: #3e2723;
+    border-bottom: 4px solid #8d6e63;
+}
+
+.card-vintage {
+    border: 1px solid #d7ccc8;
+    border-radius: 16px;
+    box-shadow: 0 12px 35px rgba(62, 39, 35, 0.12);
+    background-color: #f5f0e6;
+}
+
+/* Nút bấm chính (Primary) */
+.btn-vintage-primary {
+    background-color: #5d4037;
+    color: #fff;
+    border: 2px solid #5d4037;
+    font-weight: 700;
+    border-radius: 50rem;
+    box-shadow: 0 4px 12px rgba(93, 64, 55, 0.2);
+    transition: all 0.25s ease-in-out;
+}
+
+    .btn-vintage-primary:hover {
+        background-color: #3e2723;
+        border-color: #3e2723;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(62, 39, 35, 0.3);
+    }
+
+/* Nút bấm viền (Outline) */
+.btn-vintage-outline {
+    background-color: transparent;
+    color: #5d4037;
+    border: 2px solid #5d4037;
+    font-weight: 700;
+    border-radius: 50rem;
+    transition: all 0.25s ease-in-out;
+}
+
+    .btn-vintage-outline:hover {
+        background-color: #5d4037;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(93, 64, 55, 0.2);
+    }
+
+/* Input fields */
+.form-control-vintage {
+    border: 1px solid #bcaaa4;
+    background-color: #fffaf0;
+    color: #3e2723;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+    .form-control-vintage:focus {
+        border-color: #5d4037;
+        box-shadow: 0 0 0 0.25rem rgba(93, 64, 55, 0.15);
+        background-color: #fff;
+    }
+
+/* Các class phụ trợ tách từ inline-style */
+.text-vintage-accent {
+    color: #8d6e63 !important;
+}
+
+.btn-vintage-danger {
+    background-color: #8e0000;
+    border: 2px solid #8e0000;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 50rem;
+    transition: all 0.2s;
+}
+
+    .btn-vintage-danger:hover {
+        background-color: #660000;
+        border-color: #660000;
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(142, 0, 0, 0.25);
+    }
+
+.alert-vintage-closed {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+    border-radius: 12px;
+}
+
+/* Tinh chỉnh các lựa chọn (Options) trong trang Vote cho mềm mại, dễ nhìn */
+.btn-vintage-option {
+    border: 2px solid #d7ccc8 !important;
+    background-color: #fffaf0;
+    color: #3e2723;
+    border-radius: 12px !important;
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn-vintage-option:hover {
+        background-color: #f5f0e6 !important;
+        border-color: #5d4037 !important;
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(62, 39, 35, 0.08);
+    }
+
+.border-vintage-light {
+    border-color: #eaddcf !important;
+}
+
+.bg-vintage-muted {
+    background-color: rgba(93, 64, 55, 0.05);
+    font-size: 0.9rem;
+}
+
+.poll-question-title {
+    line-height: 1.4;
+}
